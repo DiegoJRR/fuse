@@ -6,22 +6,23 @@ from .internal import walrus
 app = FastAPI()
 
 
+PUBLISHER = "https://publisher.walrus-testnet.walrus.space"
+AGGREGATOR = "https://aggregator.walrus-testnet.walrus.space"
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
+@app.get("/download/{bloc_id}")
+def read_item(blob_id: str):
     # Initialize the Walrus client
-    publisher = "https://publisher.walrus-testnet.walrus.space"
-    aggregator = "https://aggregator.walrus-testnet.walrus.space"
-    walrus_client = walrus.Walrus(publisher, aggregator)
+    walrus_client = walrus.Walrus(PUBLISHER, AGGREGATOR)
 
-    blob_bytes = walrus_client.retrieve_blob('py5ZxopU3-vibQ2MbGCN0rHOQ2CiBhDhWvi_aySvh8w')
+    blob_bytes = walrus_client.retrieve_blob(blob_id)
 
     # Save the retrieved bytes to a file
     with open("retrieved_blob_output.jpg", "wb") as file:
         file.write(blob_bytes)
 
-    return {"item_id": item_id, "q": q}
+    return {"blob_id": blob_id}
