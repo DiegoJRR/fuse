@@ -1,7 +1,23 @@
 import Link from "next/link";
+import {
+  DynamicContextProvider,
+  DynamicWidget,
+} from "@dynamic-labs/sdk-react-core";
+
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+
+
 
 export default function HomePage() {
   return (
+
+    <DynamicContextProvider
+    settings={{
+      // Find your environment id at https://app.dynamic.xyz/dashboard/developer
+      environmentId: "18c9b510-e8c3-432e-8f7e-b56388a30201",
+      walletConnectors: [EthereumWalletConnectors],
+    }}
+  >
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
@@ -31,7 +47,9 @@ export default function HomePage() {
             </div>
           </Link>
         </div>
+    <DynamicWidget />
       </div>
     </main>
+  </DynamicContextProvider>
   );
 }
