@@ -1,10 +1,8 @@
 # Backend
-
-## API
-Written with FastAPI, under `/api`
+Written with FastAPI
 
 ## Walrus integration
-We're using public publishers and aggregators, and our implementation is in `/walrus`
+We're using public publishers and aggregators, and our implementation is in `/internal/walrus.py`
 
 ## Local development
 Create a Python virtual environment with
@@ -19,8 +17,8 @@ install dependencies
 
 `pip install -r requirements.txt`
 
-and to run the api in development mode
+and to run the api in development mode from the `backend` folder
 
-`fastapi dev api/main.py`
+`fastapi dev main.py`
 
 
