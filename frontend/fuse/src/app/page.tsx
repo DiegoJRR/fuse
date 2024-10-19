@@ -13,7 +13,6 @@ export default function HomePage() {
 
     <DynamicContextProvider
     settings={{
-      // Find your environment id at https://app.dynamic.xyz/dashboard/developer
       environmentId: "18c9b510-e8c3-432e-8f7e-b56388a30201",
       walletConnectors: [EthereumWalletConnectors],
     }}
