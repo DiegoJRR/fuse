@@ -1,6 +1,5 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
-import daisyui from 'daisyui';
 
 export default {
   content: ["./src/**/*.tsx"],
@@ -8,8 +7,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        exo: ['Exo 2', 'mono']
       },
     },
   },
-  plugins: [daisyui],
 } satisfies Config;
