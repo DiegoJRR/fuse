@@ -76,8 +76,8 @@ def combine_concepts(request: CombineConceptsRequest):
 
     db_client.put_combination(db_object)
 
-    return json.dumps(db_object).encode('utf-8')
-
+    return db_object
+    
 @app.get("/download/{bloc_id}")
 def read_item(blob_id: str):
     # Initialize the Walrus client
