@@ -7,11 +7,13 @@ const DraggableCanvas = dynamic(() => import('@/components/store/draggableCanvas
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#41126e] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-4xl font-bold mb-4">Infinite Craft Clone</h1>
-        {/* Render the DraggableCanvas */}
-        <div className="relative w-[800px] h-[600px] bg-gray-300">
+    <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#41126e] to-[#15162c] text-white">
+      <div className="flex-grow flex flex-col items-center justify-between w-full">
+        <h1 className="text-4xl font-bold mt-5">Infinite Craft Clone</h1>
+        <div className="w-full h-[20vh] bg-blue-500 flex items-center justify-center"> {/* Adjust color as needed */}
+          <DraggableCanvas />
+        </div>
+        <div className="relative w-full h-[70vh] bg-red-300">
           <DraggableCanvas />
         </div>
       </div>

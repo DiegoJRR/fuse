@@ -6,6 +6,8 @@ type DraggableItem = {
   type: string;
   x: number;
   y: number;
+  emoji: string;
+  size: string;
 };
 
 // Define the Zustand state type
@@ -18,11 +20,10 @@ type ItemState = {
 
 // Initial list of draggable items
 const initialItems: DraggableItem[] = [
-  { id: 1, type: 'tree', x: 50, y: 100 },
-  { id: 2, type: 'water', x: 200, y: 150 },
-  { id: 3, type: 'tree', x: 300, y: 250 },
+  { id: 1, type: 'tree', x: 50, y: 100, emoji: '🌳', size: 'small' },
+  { id: 2, type: 'water', x: 200, y: 150, emoji: '💧', size: 'large' },
+  { id: 3, type: 'tree', x: 300, y: 250, emoji: '🌲', size: 'small' },
 ];
-
 // Create the Zustand store
 const useItemStore = create<ItemState>((set) => ({
   items: [],
