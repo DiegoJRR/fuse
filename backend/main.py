@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 import uuid
 
 
-
 load_dotenv()
 
 import dspy
@@ -145,14 +144,17 @@ def read_item(blob_id: str):
 
     return {"blob_id": blob_id}
 
-class SignRequestBody(BaseModel):
-    to: str
-    collectible_type_URIs: str
-    contract_address :str
+@app.get("/uris/{session_id}")
+def sign(session_id: str):
+    uris = []
+    db_client = db.DB()
+    session_data = db_client.get_session(session_id)
 
-@app.get("signature/")
-def sign(request: SignRequestBody):
+    if not session_data:
+        return {"uris": uris}
 
-    signature = signer.signContract(request.to, request.collectible_type_URIs, request.amounts, request.contract_address)
+    for concept_id in session_data["concept_ids"]:
+        db_object = db_client.get_combination_by_id(concept_id)
+        uris.append(db_object["uri"])
 
-    return {"signatureMessage": signature}
+    return {"uris": uris}
