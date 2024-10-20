@@ -4,6 +4,8 @@ from typing import Union
 import json
 from pydantic import BaseModel
 from dotenv import load_dotenv
+import uuid
+
 
 load_dotenv()
 
@@ -95,6 +97,10 @@ def combine_concepts(request: CombineConceptsRequest):
 
     return db_object
     
+@app.post("/session")
+def create_session():
+    return {"session_id": str(uuid.uuid4())}
+
 @app.get("/download/{bloc_id}")
 def read_item(blob_id: str):
     # Initialize the Walrus client
