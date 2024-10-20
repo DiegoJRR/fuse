@@ -1,35 +1,46 @@
 "use client";
-import * as React from 'react';
-import { useWriteContract } from 'wagmi';
-import { abi } from './FuseCollectiblesABI';
-import { Console } from 'console';
+
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { abi } from './FuseCollectiblesABI'; // Replace with the actual ABI
+import { getWeb3Provider,getSigner } from '@dynamic-labs/ethers-v6'
+import {ethers} from 'ethers'
+import { sign } from 'crypto';
 
 export default function MintNFT() {
-const { writeContract } = useWriteContract()
+    // const to = '0x3749367e53B6fdf5ceDb2D6BCEf7d740C7074885';
+    const collectibleTypeIds = [BigInt(1)]; // Example token IDs
+    const amounts = [BigInt(1)]; // Example amounts
+    const signature = '0x1bf25efeff5e4b25d3196bf3ecbfe76e03b1a7fddc8f5a31e837ce14122c3326171b225bb1d276495c93957cd31d236743395a0275eb76a9e5fe3cf3be94ef211c'; // Example signature
+    const to = '0x3980dDB72A01ECF127c79C2b08865B9583471321'; // Replace with the recipient address
 
-const to = '0x3749367e53B6fdf5ceDb2D6BCEf7d740C7074885';
-const collectibleTypeIds = [BigInt(1), BigInt(1)]; // Example token IDs
-const amounts = [BigInt(1), BigInt(1)]; // Example amounts
-const data = '0x'; // Example data (empty)
-const signature = '0xYourTestSignatureHere'; // Example signature
+  // Proper setup of useWriteContract
+ 
+  const { primaryWallet } = useDynamicContext();
 
-return (
-    <button 
-    onClick={() => {
-        console.log("mamarre");
-        writeContract({ 
-            abi,
-            address: "0xeAe46c383D0D07e74f87de47aa2cd6ced419d370",
-            functionName: 'transfer',
-            args: [to, "100000000000000"]
-            });
-        }
-    }
-    >
-    Transfer
-    </button>
-)
+  const handleTransfer = async () => {
+    if (!primaryWallet) return;
+    const provider = await getWeb3Provider(primaryWallet)
+    const signer = await getSigner(primaryWallet)
+    const contractInstance = new ethers.Contract(
+        '0x7E7b8cdD92766a19c2dAbB7CD6750901206d7c6e',
+        abi,
+        signer
+    )
+    let sig_encode = ethers.hexlify(signature)
+    console.log(sig_encode,"encode")
+    let result = await contractInstance.mintBatchWithSignature!(to, collectibleTypeIds, amounts, signature)
+
+    console.log(result)
+
+  };
+
+  return (
+    <div>
+      <button onClick={handleTransfer}>Transfer</button>
+    </div>
+  );
 }
+
     // "use client";
     // import * as React from 'react';
     // import { useWriteContract } from 'wagmi';

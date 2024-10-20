@@ -493,11 +493,6 @@ export const abi = [
         "name": "amount",
         "type": "uint256"
       },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
     ],
     "name": "mint",
     "outputs": [],
@@ -520,11 +515,6 @@ export const abi = [
         "internalType": "uint256[]",
         "name": "amounts",
         "type": "uint256[]"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
       },
       {
         "internalType": "bytes",
@@ -635,11 +625,6 @@ export const abi = [
         "internalType": "uint256[]",
         "name": "values",
         "type": "uint256[]"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
       }
     ],
     "name": "safeBatchTransferFrom",
@@ -669,11 +654,6 @@ export const abi = [
         "name": "value",
         "type": "uint256"
       },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
     ],
     "name": "safeTransferFrom",
     "outputs": [],

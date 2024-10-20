@@ -1,8 +1,11 @@
+"use client"
 import SignMessageButton from '@/components/challenges/signWallet';
 import MintNFT  from '@/components/challenges/transactWallet';
-import dynamic from 'next/dynamic';
-import { WagmiProvider } from 'wagmi';
-import {config} from "../config";
+import dynamic from "next/dynamic";
+import Container from "../components/opencraft/Container";
+
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 // Import DraggableCanvas dynamically to disable SSR
 
@@ -17,9 +20,9 @@ export default function HomePage() {
           </DndProvider>
         </div>
         <SignMessageButton message="CHINGA TU MADRE"/>
-
+      </div>
+      <div>
         <MintNFT/>
-
       </div>
     </main>
   );
