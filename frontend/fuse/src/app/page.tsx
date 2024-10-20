@@ -11,9 +11,9 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#41126e] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="mb-4 text-4xl font-bold">Infinite Craft Clone</h1>
-        <div className="relative h-[600px] w-[800px] bg-gray-300">
+      <div className="container flex flex-col items-center justify-center gap-12 py-16">
+        <h1 className="text-4xl font-bold">Fuse Craft!</h1>
+        <div className="relative h-[70vh] w-full bg-gray-300">
           <DndProvider backend={HTML5Backend}>
             <Container />
           </DndProvider>
