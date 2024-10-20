@@ -76,7 +76,7 @@ const DropContainer = () => {
             ))}
           </div>
         </div>
-        <div className="max-h-[80vh] w-1/4 overflow-y-scroll rounded-lg border border-gray-200 bg-white px-4 py-3 shadow">
+        <div className="h-full w-1/4 overflow-y-scroll rounded-lg border border-gray-200 bg-white px-4 py-3 shadow">
           <h2 className="font-semibold">Resources</h2>
           <AvailableResources boxes_store={store} resources_store={resources_store} />
         </div>
