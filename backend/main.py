@@ -19,8 +19,10 @@ from .internal import walrus, concepts, db, ai_gen
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
-    "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app/",
+    "http://localhost:3000",  # Example of a front-end app origin
+    "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app",     # You can also specify your production domain
+    "*",
+    "https://fuse-flax.vercel.app/",
 ]
 
 app.add_middleware(
