@@ -57,12 +57,25 @@ def combine_concepts(request: CombineConceptsRequest):
 
     walrus_client = walrus.Walrus(PUBLISHER, AGGREGATOR)
     db_client = db.DB()
+
+    # Check if there's an entry in the sessions table
+    session_data = db_client.get_session(request.session_id)
+    if not session_data:
+        db_client.put_session({"id": request.session_id})
     
     ordered_concepts = concepts.format_order_concepts(request.first_concept, request.second_concept)
     combination_key = concepts.get_concepts_key(request.first_concept, request.second_concept)
 
     # Check DB to see if this key already exists
     combination_data = db_client.get_combination(combination_key)
+    combination_data["parent_name1"] = ordered_concepts[0]
+    combination_data["parent_name2"] = ordered_concepts[1]
+    combination_data["combination_key"] = combination_key
+
+    # Store in sessions table
+    session_data = db_client.get_session(request.session_id)
+    session_data["concept_ids"].append(combination_data["id"])
+    db_client.put_session(session_data)
     
     if combination_data:
         return combination_data
@@ -91,7 +104,12 @@ def combine_concepts(request: CombineConceptsRequest):
         "combination_key": combination_key
     }
 
-    db_client.put_combination(db_object)
+    response = db_client.put_combination(db_object)
+
+    # Store in sessions table
+    session_data = db_client.get_session(request.session_id)
+    session_data["concept_ids"].append(response.data[0]["id"])
+    db_client.put_session(session_data)
 
     return db_object
 

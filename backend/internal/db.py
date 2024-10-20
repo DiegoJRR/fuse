@@ -1,3 +1,4 @@
+from .supabase_client import supabase_client
 
 class DB:
     def __init__(self):
