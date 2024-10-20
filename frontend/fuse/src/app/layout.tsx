@@ -3,10 +3,13 @@ import Navbar from "@/components/ui/Navbar";
 import {
   DynamicContextProvider,
 } from "@dynamic-labs/sdk-react-core";
+import { config } from "../config";
+import { WagmiProvider } from "wagmi";
 
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 
+import Providers from "./Providers";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
@@ -32,8 +35,10 @@ export default function RootLayout({
             walletConnectors: [EthereumWalletConnectors, FlowWalletConnectors],
           }}
         >
+          <Providers>
           <Navbar />
           {children}
+          </Providers>
         </DynamicContextProvider>
       </body>
     </html>

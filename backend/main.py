@@ -14,7 +14,7 @@ import dspy
 lm = turbo = dspy.OpenAI(model='gpt-3.5-turbo-1106', max_tokens=4096, stop=['Observation'])
 dspy.settings.configure(lm=lm)
 
-from .internal import walrus, concepts, db, ai_gen
+from .internal import walrus, concepts, db, ai_gen, signer
 
 app = FastAPI()
 
@@ -143,3 +143,18 @@ def read_item(blob_id: str):
         file.write(blob_bytes)
 
     return {"blob_id": blob_id}
+
+@app.get("/uris/{session_id}")
+def sign(session_id: str):
+    uris = []
+    db_client = db.DB()
+    session_data = db_client.get_session(session_id)
+
+    if not session_data:
+        return {"uris": uris}
+
+    for concept_id in session_data["concept_ids"]:
+        db_object = db_client.get_combination_by_id(concept_id)
+        uris.append(db_object["uri"])
+
+    return {"uris": uris}

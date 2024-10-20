@@ -1,5 +1,6 @@
-"use client";
-
+"use client"
+import SignMessageButton from '@/components/challenges/signWallet';
+import MintNFT  from '@/components/challenges/transactWallet';
 import dynamic from "next/dynamic";
 import Container from "../components/opencraft/Container";
 
