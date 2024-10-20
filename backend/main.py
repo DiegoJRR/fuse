@@ -78,7 +78,8 @@ def combine_concepts(request: CombineConceptsRequest):
         "name": f"{combination_result} {emoji_result}",
     }
     
-    blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
+    # blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
+    blob_id = "sample"
     
     # And add metadata
     db_object = {
