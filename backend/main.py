@@ -21,8 +21,8 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",  # Example of a front-end app origin
     "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app",     # You can also specify your production domain
-    "*",
     "https://fuse-flax.vercel.app/",
+    "*",
 ]
 
 app.add_middleware(
