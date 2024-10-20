@@ -1,6 +1,7 @@
 export const getNewSessionId = async (): Promise<string> => {
 const response = await fetch("https://fuse-production.up.railway.app/session", {
     method: "POST",
+    mode: 'no-cors',
     headers: {
     "Content-Type": "application/json",
     },
