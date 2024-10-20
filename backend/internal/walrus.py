@@ -1,4 +1,5 @@
 import time
+import json
 import requests
 
 
@@ -26,6 +27,7 @@ class Walrus:
         response.raise_for_status()
         return response.json()
 
+    # TODO: Cache this
     def retrieve_blob(self, blob_id: str, output_file: str = None) -> str:
         """
         Retrieve a blob by its ID. Optionally save the contents to a file.
@@ -45,3 +47,33 @@ class Walrus:
                         file.write(chunk)
 
         return bytes(content)
+
+def upload_json(walrus_instance: Walrus, data_dict: dict, epochs: int = 1) -> dict:
+    """
+    Upload a JSON representation of a Python dictionary to the Walrus instance.
+
+    :param walrus_instance: An instance of the Walrus class.
+    :param data_dict: The Python dictionary to be uploaded.
+    :param epochs: Number of epochs to store the data for. Defaults to 1.
+    :return: The response from the server as a dictionary.
+    """
+    # Convert the dictionary to a JSON string and encode it to bytes
+    json_data = json.dumps(data_dict).encode('utf-8')
+    # Call the store_blob method to upload the data
+    response = walrus_instance.store_blob(json_data, epochs)
+    return response
+
+
+def read_json(walrus_instance: Walrus, blob_id: str) -> dict:
+    """
+    Retrieve a JSON blob from the Walrus instance and convert it back to a Python dictionary.
+
+    :param walrus_instance: An instance of the Walrus class.
+    :param blob_id: The ID of the blob to retrieve.
+    :return: The retrieved data as a Python dictionary.
+    """
+    # Retrieve the blob content as bytes
+    blob_content = walrus_instance.retrieve_blob(blob_id)
+    # Decode the bytes back to a JSON string and parse it into a dictionary
+    data_dict = json.loads(blob_content.decode('utf-8'))
+    return data_dict
