@@ -1,13 +1,13 @@
-from  supabase_client import supabase_client
+from .supabase_client import supabase_client
 
 class DB:
     def __init__(self):
         return
 
     def get_combination(self, combination_key: str):
-        metadata_query_result = supabase_client.table('concepts').select('id','uri').eq('combination_key',combination_key).execute()
+        metadata_query_result = supabase_client.table('concepts').select('id','uri','name','emoji').eq('combination_key',combination_key).execute()
         
-        if metadata_query_result.count > 0:
+        if len(metadata_query_result.data) > 0:
             return metadata_query_result.data[0]
         else:
             return None
