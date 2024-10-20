@@ -1,4 +1,12 @@
 import "@/styles/globals.css";
+import Navbar from "@/components/ui/Navbar";
+import {
+  DynamicContextProvider,
+} from "@dynamic-labs/sdk-react-core";
+
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+import { FlowWalletConnectors } from "@dynamic-labs/flow";
+
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
@@ -14,7 +22,19 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+
+
+      <body>
+        <DynamicContextProvider
+          settings={{
+            environmentId: "18c9b510-e8c3-432e-8f7e-b56388a30201",
+            walletConnectors: [EthereumWalletConnectors, FlowWalletConnectors],
+          }}
+        >
+          <Navbar />
+          {children}
+        </DynamicContextProvider>
+      </body>
     </html>
   );
 }
