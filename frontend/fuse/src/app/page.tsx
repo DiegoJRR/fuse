@@ -6,23 +6,32 @@ import Container from "../components/opencraft/Container";
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
-// Import DraggableCanvas dynamically to disable SSR
+import { useEffect, useState } from "react";
+import { getNewSessionId } from "./getSessionId";
 
 export default function HomePage() {
+  useEffect(() => {
+    const setSessionCookie = async () => {
+      try {
+        // Fetch the session ID
+        const session_id = await getNewSessionId();
+
+        if (session_id) {
+          document.cookie = `sessionId=${session_id}; path=/; max-age=3600`; // Expires in 1 hour
+        }
+      } catch (error) {
+        console.error("Error setting session cookie:", error);
+      }
+    };
+
+    setSessionCookie();
+  }, []); // Empty dependency array ensures this effect runs only once
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#41126e] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 py-16">
-        <h1 className="text-4xl font-bold">Fuse Craft!</h1>
-        <div className="relative h-[70vh] w-full bg-gray-300">
-          <DndProvider backend={HTML5Backend}>
-            <Container />
-          </DndProvider>
-        </div>
-        <SignMessageButton message="CHINGA TU MADRE"/>
-      </div>
-      <div>
-        <MintNFT/>
+    <main className="flex min-h-screen h-screen w-screen flex-col items-center justify-center bg-gradient-to-b from-[#41126e] to-[#15162c] text-white pt-[72px]">
+      <div className="relative h-full w-full bg-slate-800">
+        <DndProvider backend={HTML5Backend}>
+          <Container />
+        </DndProvider>
       </div>
     </main>
   );

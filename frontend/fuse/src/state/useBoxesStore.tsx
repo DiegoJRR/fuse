@@ -17,7 +17,6 @@ export interface BoxStores {
 export const useBoxesStore = () => {
     // State to hold boxes, initialized with a default box
     const [boxes, setBoxes] = useState<{ [key: string]: BoxStoreEntry }>({
-        a: { top: 20, left: 80, title: 'Fire', emoji: '🔥', loading: false},
     });
 
     // Function to add a box
