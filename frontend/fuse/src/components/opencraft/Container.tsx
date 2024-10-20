@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import React, { useRef, useEffect } from "react";
@@ -12,9 +11,9 @@ import { useResourcesStore } from "@/state/useResourcesStore";
 
 const DropContainer = () => {
   const store = useBoxesStore();
-  const resources_store = useResourcesStore()
+  const resources_store = useResourcesStore();
   const { boxes, addBox, moveBox } = store;
-  const { resources, addResource } = resources_store
+  const { resources, addResource } = resources_store;
 
   const containerElement = useRef<HTMLDivElement>(null);
 
@@ -53,10 +52,10 @@ const DropContainer = () => {
   }, [drop]);
 
   return (
-    <div ref={containerElement}>
-      <main className="flex gap-x-3">
-        <div className="w-3/4">
-          <div className="container">
+    <div ref={containerElement} className="h-screen w-full">
+      <main className="flex gap-x-3 h-full">
+        <div className="w-3/4 h-full">
+          <div className="relative h-full">
             {Object.entries(boxes).map(([key, value]) => (
               <Box
                 id={key}
@@ -79,7 +78,7 @@ const DropContainer = () => {
         </div>
         <div className="h-full w-1/4 overflow-y-scroll rounded-lg border border-gray-200 bg-white px-4 py-3 shadow">
           <h2 className="font-semibold">Resources</h2>
-          <AvailableResources boxes_store={store} resources_store={resources_store}/>
+          <AvailableResources boxes_store={store} resources_store={resources_store} />
         </div>
       </main>
     </div>

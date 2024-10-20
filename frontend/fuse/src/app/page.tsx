@@ -8,8 +8,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { useEffect, useState } from "react";
 import { getNewSessionId } from "./getSessionId";
 
-// Import DraggableCanvas dynamically to disable SSR
-
 export default function HomePage() {
   useEffect(() => {
     const setSessionCookie = async () => {
@@ -28,14 +26,11 @@ export default function HomePage() {
     setSessionCookie();
   }, []); // Empty dependency array ensures this effect runs only once
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#41126e] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 py-16">
-        <h1 className="text-4xl font-bold">Fuse Craft!</h1>
-        <div className="relative h-[70vh] w-full bg-gray-300">
-          <DndProvider backend={HTML5Backend}>
-            <Container />
-          </DndProvider>
-        </div>
+    <main className="flex min-h-screen h-screen w-screen flex-col items-center justify-center bg-gradient-to-b from-[#41126e] to-[#15162c] text-white pt-[72px]">
+      <div className="relative h-full w-full bg-slate-800">
+        <DndProvider backend={HTML5Backend}>
+          <Container />
+        </DndProvider>
       </div>
     </main>
   );
