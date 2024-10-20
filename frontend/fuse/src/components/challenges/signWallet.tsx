@@ -16,6 +16,7 @@ export default function SignMessageButton({ message }: SignMessageButtonProps) {
     const signature = await primaryWallet.signMessage(message);
 
     console.log('signature', signature);
+    console.log(primaryWallet.address)
   };
 
   return <button onClick={signMessage}>Sign message</button>;

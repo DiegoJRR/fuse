@@ -158,3 +158,8 @@ def sign(session_id: str):
         uris.append(db_object["uri"])
 
     return {"uris": uris}
+@app.get("/signature")
+def sign(address: str,collectible_type_ids: str,amounts: int):
+    
+    signature = signer.signContract(address, collectible_type_ids, amounts,"0xE38b618CEE9e26221Da3c2BA52405580355987fC")
+    return {"signature": signature}

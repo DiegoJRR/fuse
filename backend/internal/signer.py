@@ -16,6 +16,6 @@ def signContract(to,collectible_type_ids,amounts, contract_address):
     # amounts = [1]  # Assuming these are uint256 values
     # contract_address = '0x7E7b8cdD92766a19c2dAbB7CD6750901206d7c6e'  # Contract address
 
-    encoded_data = Web3.solidity_keccak(["address", "uint256[]", "uint256[]", "address"], [to, collectible_type_ids, amounts, contract_address])
+    encoded_data = Web3.solidity_keccak(["address", "string[]", "uint256[]", "address"], [to, collectible_type_ids, amounts, contract_address])
     signed_message = account.sign_message(encode_defunct(encoded_data))
     return(signed_message)  
