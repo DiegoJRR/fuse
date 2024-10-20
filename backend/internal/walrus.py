@@ -20,7 +20,6 @@ class Walrus:
         url = f"{self.publisher_url}/v1/store?epochs={epochs}"
         start_time = time.time()
         response = requests.put(url, data=file_data)
-        print(response)
         end_time = time.time()
         
         elapsed_time = end_time - start_time
@@ -72,6 +71,7 @@ def upload_json(walrus_instance: Walrus, data_dict: dict, epochs: int = 1) -> di
     # Call the store_blob method to upload the data
     print(json_data)
     virtual_file = io.BytesIO(json_data)
+
     response = walrus_instance.store_blob(virtual_file, epochs)
     return response
 

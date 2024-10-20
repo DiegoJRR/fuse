@@ -3,6 +3,7 @@ from typing import Union
 import json
 from pydantic import BaseModel
 from dotenv import load_dotenv
+
 load_dotenv() 
 
 import dspy
@@ -15,8 +16,8 @@ from .internal import walrus, concepts, db, ai_gen
 app = FastAPI()
 
 
-PUBLISHER = "https://publisher.walrus-testnet.walrus.space"
-AGGREGATOR = "https://aggregator.walrus-testnet.walrus.space"
+PUBLISHER = "https://walrus-testnet-publisher.nodes.guru"
+AGGREGATOR = "https://walrus-testnet.blockscope.net"
 DEFAULT_EPOCHS = 1 # TODO: Tune
 
 @app.get("/")
@@ -47,36 +48,35 @@ def combine_concepts(request: CombineConceptsRequest):
     # Check DB to see if this key already exists
     combination_data = db_client.get_combination(combination_key)
     
-    
     if combination_data:
         return combination_data
-    else:
-        concept_combinator = ai_gen.ConceptCombinator()
-        emoji_generator = ai_gen.EmojiGenerator()
 
-        combination_result = concept_combinator(concept_1 = ordered_concepts[0], concept_2 = ordered_concepts[1])
-        emoji_result = emoji_generator(combination_result)
-        
-        combination_metadata = {
-            "description": "Fuse game object.",
-            "name": f"{combination_result} {emoji_result}",
-        }
-        
-        blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
-        
+    concept_combinator = ai_gen.ConceptCombinator()
+    emoji_generator = ai_gen.EmojiGenerator()
+
+    combination_result = concept_combinator(concept_1 = ordered_concepts[0], concept_2 = ordered_concepts[1])
+    emoji_result = emoji_generator(combination_result)
+    
+    combination_metadata = {
+        "description": "Fuse game object.",
+        "name": f"{combination_result} {emoji_result}",
+    }
+    
+    blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
+    
     # And add metadata
-        db_object = {
-            "name": combination_result,
-            "emoji": emoji_result,
-            "uri": 'https://blobid.walrus/'+blob_id,
-            "parent_name1": ordered_concepts[0],
-            "parent_name2": ordered_concepts[1],
-            "combination_key": combination_key
-        }
+    db_object = {
+        "name": combination_result,
+        "emoji": emoji_result,
+        "uri": 'https://blobid.walrus/'+blob_id,
+        "parent_name1": ordered_concepts[0],
+        "parent_name2": ordered_concepts[1],
+        "combination_key": combination_key
+    }
 
-        db_client.put_combination(db_object)
+    db_client.put_combination(db_object)
 
-        return json.dumps(db_object).encode('utf-8')
+    return json.dumps(db_object).encode('utf-8')
 
 @app.get("/download/{bloc_id}")
 def read_item(blob_id: str):
