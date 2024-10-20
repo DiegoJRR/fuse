@@ -27,6 +27,7 @@ class Walrus:
         response.raise_for_status()
         return response.json()
 
+    # TODO: Cache this
     def retrieve_blob(self, blob_id: str, output_file: str = None) -> str:
         """
         Retrieve a blob by its ID. Optionally save the contents to a file.
