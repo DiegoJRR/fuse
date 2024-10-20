@@ -4,3 +4,9 @@ hypercorn
 pytest
 dspy
 supabase
+
+eth-account
+eth-utils
+eth-abi
+web3
+web3[tester]
