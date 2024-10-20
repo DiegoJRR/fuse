@@ -3,9 +3,9 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
+import { ConceptCombinationRequest, postConceptCombination } from '@/app/conceptCombination';
 
 const DraggableItem = ({ title, emoji, id, size, boxes_store, resources_store}) => {
-  console.log(resources_store)
   const {boxes, removeBox, addBox, toggleLoadingBox} = boxes_store;
   const {resources, addResource} = resources_store
   
@@ -17,18 +17,21 @@ const DraggableItem = ({ title, emoji, id, size, boxes_store, resources_store}) 
         const secondTitle = boxes[droppedId]?.title ?? item?.title;
 
         console.log(boxes)
-        console.log("uwu", boxes[id])
-        console.log(boxes)
-        
+
+        const request: ConceptCombinationRequest = {
+          session_id: '12345',
+          first_concept: title,
+          second_concept: secondTitle,
+        };
         
         removeBox(droppedId)
         toggleLoadingBox(id)
-        const sleep = ms => new Promise(r => setTimeout(r, ms));
-        sleep(500).then(
-          ()=>{
+
+        postConceptCombination(request).then(
+          (response)=>{
             removeBox(id)
-            const resultAnswer = "dog";
-            const resultEmoji = "🤦‍♂️";
+            const resultAnswer = response.name;
+            const resultEmoji = response.emoji;
     
             addBox({
               title: resultAnswer,
@@ -44,11 +47,14 @@ const DraggableItem = ({ title, emoji, id, size, boxes_store, resources_store}) 
                 emoji: resultEmoji,
               });
             }
-          })
+          }).catch((error) => {
+            // Handle any errors here
+            console.error('Error occurred:', error.message);
+          });
        
       }
     },
-  }));
+  }), [boxes]);
 
   const classNames = `
     ${size === 'large' ? 'text-2xl space-x-2.5 py-2.5 px-4' : 'space-x-1.5 px-3 py-1'}

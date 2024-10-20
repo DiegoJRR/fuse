@@ -22,7 +22,6 @@ const DropContainer = () => {
     drop(item, monitor) {
       if (item.id) {
         const delta = monitor.getDifferenceFromInitialOffset();
-        console.log("Delta", delta);
         if (delta && delta.x !== null && delta.y !== null) {
           moveBox(item.id, delta.x, delta.y);
         }
