@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import BackgroundTasks, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 import json
 from pydantic import BaseModel
 from dotenv import load_dotenv
+import uuid
+
 
 load_dotenv()
 
@@ -16,19 +18,19 @@ from .internal import walrus, concepts, db, ai_gen
 
 app = FastAPI()
 
-# Define the allowed origins
 origins = [
     "http://localhost:3000",  # Example of a front-end app origin
-    "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app/",     # You can also specify your production domain
+    "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app",     # You can also specify your production domain
+    "*",
+    "https://fuse-flax.vercel.app/",
 ]
 
-# Add the CORSMiddleware to the application
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # List of allowed origins
-    allow_credentials=True,  # Allow cookies to be sent with cross-origin requests
-    allow_methods=["*"],     # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"],     # Allow all headers
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"], 
 )
 
 
@@ -45,8 +47,22 @@ class CombineConceptsRequest(BaseModel):
     first_concept: str
     second_concept: str
 
+def upload_to_walrus(combination_metadata, concept_id: str):
+    walrus_client = walrus.Walrus(PUBLISHER, AGGREGATOR)
+    db_client = db.DB()
+
+    blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
+
+    # Update existing db record
+    db_object = db_client.get_combination_by_id(concept_id)
+    db_object["uri"] = f"{AGGREGATOR}/v1/{blob_id}"
+
+    # This upserts the combination record
+    db_client.put_combination(db_object)
+
+
 @app.post("/combine")
-def combine_concepts(request: CombineConceptsRequest):
+async def combine_concepts(request: CombineConceptsRequest, background_tasks: BackgroundTasks):
     """
     This endpoint recieves a session id, and two concepts as strings, and returns
     the generated result concept from their combination.
@@ -57,14 +73,27 @@ def combine_concepts(request: CombineConceptsRequest):
 
     walrus_client = walrus.Walrus(PUBLISHER, AGGREGATOR)
     db_client = db.DB()
+
+    # Check if there's an entry in the sessions table
+    session_data = db_client.get_session(request.session_id)
+    if not session_data:
+        db_client.put_session({"id": request.session_id})
     
     ordered_concepts = concepts.format_order_concepts(request.first_concept, request.second_concept)
     combination_key = concepts.get_concepts_key(request.first_concept, request.second_concept)
 
     # Check DB to see if this key already exists
     combination_data = db_client.get_combination(combination_key)
-    
+
     if combination_data:
+        # Store in sessions table
+        session_data = db_client.get_session(request.session_id)
+        session_data["concept_ids"].append(combination_data["id"])
+        db_client.put_session(session_data)
+        
+        combination_data["parent_name1"] = ordered_concepts[0]
+        combination_data["parent_name2"] = ordered_concepts[1]
+        combination_data["combination_key"] = combination_key
         return combination_data
 
     concept_combinator = ai_gen.ConceptCombinator()
@@ -78,23 +107,30 @@ def combine_concepts(request: CombineConceptsRequest):
         "name": f"{combination_result} {emoji_result}",
     }
     
-    # blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
-    blob_id = "sample"
-    
     # And add metadata
     db_object = {
         "name": combination_result,
         "emoji": emoji_result,
-        "uri": 'https://blobid.walrus/'+blob_id,
+        "uri": "", # Adding empty since the column is not nullable
         "parent_name1": ordered_concepts[0],
         "parent_name2": ordered_concepts[1],
         "combination_key": combination_key
     }
 
-    db_client.put_combination(db_object)
+    response = db_client.put_combination(db_object)
+    background_tasks.add_task(upload_to_walrus, combination_result, response.data[0]["id"])
+
+    # Store in sessions table
+    session_data = db_client.get_session(request.session_id)
+    session_data["concept_ids"].append(response.data[0]["id"])
+    db_client.put_session(session_data)
 
     return db_object
-    
+
+@app.post("/session")
+def create_session():
+    return {"session_id": str(uuid.uuid4())}
+
 @app.get("/download/{bloc_id}")
 def read_item(blob_id: str):
     # Initialize the Walrus client
