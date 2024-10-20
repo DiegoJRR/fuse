@@ -18,19 +18,17 @@ from .internal import walrus, concepts, db, ai_gen
 
 app = FastAPI()
 
-# Define the allowed origins
 origins = [
-    "http://localhost:3000",  # Example of a front-end app origin
-    "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app/",     # You can also specify your production domain
+    "http://localhost:3000",
+    "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app/",
 ]
 
-# Add the CORSMiddleware to the application
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # List of allowed origins
-    allow_credentials=True,  # Allow cookies to be sent with cross-origin requests
-    allow_methods=["*"],     # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"],     # Allow all headers
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"], 
 )
 
 
@@ -96,7 +94,7 @@ def combine_concepts(request: CombineConceptsRequest):
     db_client.put_combination(db_object)
 
     return db_object
-    
+
 @app.post("/session")
 def create_session():
     return {"session_id": str(uuid.uuid4())}
