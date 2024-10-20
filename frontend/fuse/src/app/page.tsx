@@ -1,4 +1,8 @@
+import SignMessageButton from '@/components/challenges/signWallet';
+import MintNFT  from '@/components/challenges/transactWallet';
 import dynamic from 'next/dynamic';
+import { WagmiProvider } from 'wagmi';
+import {config} from "../config";
 
 // Import DraggableCanvas dynamically to disable SSR
 const DraggableCanvas = dynamic(() => import('@/components/store/draggableCanvas'), {
@@ -14,6 +18,10 @@ export default function HomePage() {
         <div className="relative w-[800px] h-[600px] bg-gray-300">
           <DraggableCanvas />
         </div>
+        <SignMessageButton message="CHINGA TU MADRE"/>
+
+        <MintNFT/>
+
       </div>
     </main>
   );
