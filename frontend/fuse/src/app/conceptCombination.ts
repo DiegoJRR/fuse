@@ -29,18 +29,4 @@ export const postConceptCombination = async (request: ConceptCombinationRequest)
   const data: ConceptCombinationResponse = await response.json();
   return data;
 };
-
-  // const request: ConceptCombinationRequest = {
-  //   session_id: "123",
-  //   first_concept: "tree",
-  //   second_concept: "gold",
-  // };
-
-  // try {
-  //   const response = await postConceptCombination(request);
-  //   console.log(response)
-  //   console.log(response.name);
-  // } catch (error) {
-  //   console.error("Error:", error);
-  // }
-
+ 

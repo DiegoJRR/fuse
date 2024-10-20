@@ -69,7 +69,6 @@ def upload_json(walrus_instance: Walrus, data_dict: dict, epochs: int = 1) -> di
     # Convert the dictionary to a JSON string and encode it to bytes
     json_data = json.dumps(data_dict).encode('utf-8')
     # Call the store_blob method to upload the data
-    print(json_data)
     virtual_file = io.BytesIO(json_data)
 
     response = walrus_instance.store_blob(virtual_file, epochs)

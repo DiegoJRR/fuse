@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 import json
 from pydantic import BaseModel
@@ -14,6 +15,23 @@ dspy.settings.configure(lm=lm)
 from .internal import walrus, concepts, db, ai_gen
 
 app = FastAPI()
+
+# Define the allowed origins
+origins = [
+    "http://localhost:3000",  # Example of a front-end app origin
+    "https://fuse-gzf35clch-efrain-quinteros-projects.vercel.app",     # You can also specify your production domain
+    "*",
+    "https://fuse-flax.vercel.app/",
+]
+
+# Add the CORSMiddleware to the application
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # List of allowed origins
+    allow_credentials=True,  # Allow cookies to be sent with cross-origin requests
+    allow_methods=["*"],     # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],     # Allow all headers
+)
 
 
 PUBLISHER = "https://walrus-testnet-publisher.nodes.guru"
@@ -65,7 +83,8 @@ def combine_concepts(request: CombineConceptsRequest):
         "name": f"{combination_result} {emoji_result}",
     }
     
-    blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
+    # blob_id = walrus.upload_json(walrus_client, combination_metadata, DEFAULT_EPOCHS)
+    blob_id = "sample"
     
     # And add metadata
     db_object = {
