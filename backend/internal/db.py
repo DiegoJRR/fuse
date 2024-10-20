@@ -23,6 +23,14 @@ class DB:
         else:
             return None
 
+    def get_combination_by_id(self, concept_id: str):
+        metadata_query_result = supabase_client.table('concepts').select('id','uri','name','emoji').eq('id', concept_id).execute()
+        
+        if len(metadata_query_result.data) > 0:
+            return metadata_query_result.data[0]
+        else:
+            return None
+
     def put_combination(self, combination_metadata):
-        return supabase_client.table('concepts').insert(combination_metadata).execute()
+        return supabase_client.table('concepts').upsert(combination_metadata).execute()
         
