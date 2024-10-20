@@ -3,46 +3,49 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
-import { useBoxesStore } from '../../state/useBoxesStore';
-import { useResourcesStore } from '../../state/useResourcesStore';
 
-const DraggableItem = ({ title, emoji, id, size }) => {
-  const store = useBoxesStore();
-  const { removeBox, addBox } = store;
-  const { resources } = useResourcesStore();
-  const { addResource } = useResourcesStore();
+const DraggableItem = ({ title, emoji, id, size, boxes_store, resources_store}) => {
+  console.log(resources_store)
+  const {boxes, removeBox, addBox, toggleLoadingBox} = boxes_store;
+  const {resources, addResource} = resources_store
   
   const [, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     async drop(item) {
       if (item.id !== id) {
-        const droppedId = item?.id;
-        const secondTitle = store.boxes[droppedId]?.title ?? item?.title;
+        const droppedId = item.id;
+        const secondTitle = boxes[droppedId]?.title ?? item?.title;
 
-        if (droppedId) {
-          removeBox(droppedId);
-        }
-
-        store.boxes[id].loading = true;
-
-        const resultAnswer = "dog";
-        const resultEmoji = "🤦‍♂️";
-
-        addBox({
-          title: resultAnswer,
-          emoji: resultEmoji,
-          left: store.boxes[id].left,
-          top: store.boxes[id].top,
-        });
-
-        if (!resources.value.find((resource) => resource.title === resultAnswer)) {
-          addResource({
-            title: resultAnswer,
-            emoji: resultEmoji,
-          });
-        }
-
-        removeBox(id);
+        console.log(boxes)
+        console.log("uwu", boxes[id])
+        console.log(boxes)
+        
+        
+        removeBox(droppedId)
+        toggleLoadingBox(id)
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        sleep(500).then(
+          ()=>{
+            removeBox(id)
+            const resultAnswer = "dog";
+            const resultEmoji = "🤦‍♂️";
+    
+            addBox({
+              title: resultAnswer,
+              emoji: resultEmoji,
+              left: boxes[id].left,
+              top: boxes[id].top,
+              loading: false
+            });
+    
+            if (!resources.find((resource) => resource.title === resultAnswer)) {
+              addResource({
+                title: resultAnswer,
+                emoji: resultEmoji,
+              });
+            }
+          })
+       
       }
     },
   }));

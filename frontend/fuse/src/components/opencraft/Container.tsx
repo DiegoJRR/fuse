@@ -1,16 +1,19 @@
 "use client";
 
-import React, { useRef, useEffect } from 'react';
-import { useDrop } from 'react-dnd';
-import { ItemTypes } from './ItemTypes';
-import Box from './Box';
+import React, { useRef, useEffect } from "react";
+import { useDrop } from "react-dnd";
+import { ItemTypes } from "./ItemTypes";
+import Box from "./Box";
 import ItemCard from "./ItemCard";
 import AvailableResources from "./AvailableResources";
 import { useBoxesStore } from "../../state/useBoxesStore";
+import { useResourcesStore } from "@/state/useResourcesStore";
 
 const DropContainer = () => {
   const store = useBoxesStore();
-  const { boxes, addBox, moveBox, removeBox } = store;
+  const resources_store = useResourcesStore()
+  const { boxes, addBox, moveBox } = store;
+  const { resources, addResource } = resources_store
 
   const containerElement = useRef<HTMLDivElement>(null);
 
@@ -25,11 +28,18 @@ const DropContainer = () => {
         }
       } else {
         const delta = monitor.getClientOffset();
-        const containerCoords = containerElement.current.getBoundingClientRect();
+        const containerCoords =
+          containerElement.current.getBoundingClientRect();
         if (delta && delta.x !== null && delta.y !== null) {
           const left = Math.round(delta.x - containerCoords.left - 40);
           const top = Math.round(delta.y - containerCoords.top - 15);
-          addBox({left, top, title: item.title, emoji: item.emoji});
+          addBox({
+            left,
+            top,
+            title: item.title,
+            emoji: item.emoji,
+            loading: false,
+          });
         }
       }
       return undefined;
@@ -55,14 +65,21 @@ const DropContainer = () => {
                 top={value.top}
                 loading={value.loading}
               >
-                <ItemCard size="large" id={key} title={value.title} emoji={value.emoji} />
+                <ItemCard
+                  size="large"
+                  id={key}
+                  title={value.title}
+                  emoji={value.emoji}
+                  boxes_store={store}
+                  resources_store={resources_store}
+                />
               </Box>
             ))}
           </div>
         </div>
-        <div className="w-1/4 bg-white shadow px-4 py-3 border-gray-200 border rounded-lg overflow-y-scroll max-h-[80vh]">
+        <div className="max-h-[80vh] w-1/4 overflow-y-scroll rounded-lg border border-gray-200 bg-white px-4 py-3 shadow">
           <h2 className="font-semibold">Resources</h2>
-          <AvailableResources />
+          <AvailableResources boxes_store={store} resources_store={resources_store}/>
         </div>
       </main>
     </div>

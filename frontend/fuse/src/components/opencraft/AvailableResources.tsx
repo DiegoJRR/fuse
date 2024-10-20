@@ -2,10 +2,9 @@
 
 import React, { useState, useMemo } from 'react';
 import Resource from './Resources';
-import { useResourcesStore } from '../../state/useResourcesStore';
 
-const ResourceList = () => {
-    const { resources } = useResourcesStore(); // Assuming this hook directly returns resources
+const ResourceList = ({boxes_store, resources_store}) => {
+    const { resources } = resources_store// Assuming this hook directly returns resources
     const [searchTerm, setSearchTerm] = useState('');
 
     // Filter resources based on the search term
@@ -29,6 +28,8 @@ const ResourceList = () => {
                     key={resource.title}
                     title={resource.title}
                     emoji={resource.emoji}
+                    boxes_store={boxes_store}
+                    resources_store={resources_store}
                 />
             ))}
         </div>

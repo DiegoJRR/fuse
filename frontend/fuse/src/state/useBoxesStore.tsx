@@ -5,7 +5,7 @@ export interface BoxStoreEntry {
     left: number;
     title?: string | undefined;
     emoji?: string | undefined;
-    loading?: boolean;
+    loading: boolean;
 }
 
 export interface BoxStores {
@@ -16,7 +16,7 @@ export interface BoxStores {
 export const useBoxesStore = () => {
     // State to hold boxes, initialized with a default box
     const [boxes, setBoxes] = useState<{ [key: string]: BoxStoreEntry }>({
-        a: { top: 20, left: 80, title: 'Fire', emoji: '🔥' },
+        a: { top: 20, left: 80, title: 'Fire', emoji: '🔥', loading: false},
     });
 
     // Function to add a box
@@ -50,5 +50,16 @@ export const useBoxesStore = () => {
         });
     }
 
-    return { boxes, addBox, moveBox, removeBox };
+    const toggleLoadingBox = (id : string) => {
+            setBoxes((prevBoxes) => {
+                const newBoxes : BoxStores = { ...prevBoxes } as BoxStores;
+                newBoxes[id] = {
+                    ...newBoxes[id],
+                    loading: !(newBoxes[id]?.loading)
+                } ;
+                return newBoxes;
+            });
+    }
+
+    return { boxes, addBox, moveBox, removeBox, toggleLoadingBox};
 };

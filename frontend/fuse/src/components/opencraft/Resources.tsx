@@ -5,7 +5,7 @@ import { useDrag } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
 import ItemCard from './ItemCard';
 
-const DraggableItem = ({ emoji, title }) => {
+const DraggableItem = ({ emoji, title, boxes_store, resources_store }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.BOX,
         item: { title, emoji },
@@ -22,7 +22,7 @@ const DraggableItem = ({ emoji, title }) => {
             className="inline-block"
             style={{ opacity: isDragging ? 0.5 : 1 }} 
         >
-            <ItemCard title={title} emoji={emoji} />
+            <ItemCard title={title} emoji={emoji} boxes_store={boxes_store} resources_store={resources_store}/>
         </div>
     );
 };

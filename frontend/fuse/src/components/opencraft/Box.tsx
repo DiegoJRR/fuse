@@ -1,17 +1,17 @@
 "use client";
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useDrag } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
-
 const DraggableBox = ({ id, left, top, hideSourceOnDrag = false, loading = false, children }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: ItemTypes.BOX,
     item: { id, left, top },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   }));
+
 
   if (isDragging) {
     return null; // Don't render the box when it's being dragged
