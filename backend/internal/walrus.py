@@ -1,6 +1,7 @@
 import time
 import json
 import requests
+import io
 
 
 class Walrus:
@@ -19,6 +20,7 @@ class Walrus:
         url = f"{self.publisher_url}/v1/store?epochs={epochs}"
         start_time = time.time()
         response = requests.put(url, data=file_data)
+        print(response)
         end_time = time.time()
         
         elapsed_time = end_time - start_time
@@ -68,7 +70,9 @@ def upload_json(walrus_instance: Walrus, data_dict: dict, epochs: int = 1) -> di
     # Convert the dictionary to a JSON string and encode it to bytes
     json_data = json.dumps(data_dict).encode('utf-8')
     # Call the store_blob method to upload the data
-    response = walrus_instance.store_blob(json_data, epochs)
+    print(json_data)
+    virtual_file = io.BytesIO(json_data)
+    response = walrus_instance.store_blob(virtual_file, epochs)
     return response
 
 
