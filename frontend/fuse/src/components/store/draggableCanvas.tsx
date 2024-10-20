@@ -3,14 +3,15 @@
 import React from 'react';
 import { useDrag } from 'react-use-gesture';
 import useItemStore from '../../state/itemStore';
+import Tile from '../ui/Tile';
 
 // Component for individual draggable items
-const DraggableItem: React.FC<{ item: { id: number; type: string; x: number; y: number } }> = ({ item }) => {
+const DraggableItem: React.FC<{ item: { id: number; type: string; x: number; y: number; emoji: string; size: string; } }> = ({ item }) => {
   const updateItem = useItemStore((state) => state.updateItem);
 
   // Use gesture hook to handle dragging
   const bind = useDrag(({ offset: [x, y] }) => {
-    updateItem(item.id, x, y); // Update position on drag
+    updateItem(item.id, x, y);
   });
 
   return (
@@ -20,13 +21,10 @@ const DraggableItem: React.FC<{ item: { id: number; type: string; x: number; y: 
         position: 'absolute',
         left: item.x,
         top: item.y,
-        width: 50,
-        height: 50,
-        backgroundColor: item.type === 'tree' ? 'green' : 'blue',
-        cursor: 'move',
       }}
-    />
-  );
+    >
+      <Tile title={item.type} emoji={item.emoji} size={item.size} /> 
+    </div>  );
 };
 
 // Draggable canvas to contain the items

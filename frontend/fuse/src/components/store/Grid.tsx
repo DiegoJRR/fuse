@@ -2,7 +2,7 @@
 import React from 'react';
 // Import the FixedSizeGrid component from react-window
 import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
-import Tile from './Tile';
+import Tile from '../ui/Tile';
 
 // Define the types for GridComponentProps
 interface GridComponentProps {
