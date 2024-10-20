@@ -147,13 +147,12 @@ def read_item(blob_id: str):
 
 class SignRequestBody(BaseModel):
     to: str
-    collectible_type_ids: str
-    amounts: str
+    collectible_type_URIs: str
     contract_address :str
 
 @app.get("signature/")
 def sign(request: SignRequestBody):
 
-    signature = signer.signContract(request.to, request.collectible_type_ids, request.amounts, request.contract_address)
+    signature = signer.signContract(request.to, request.collectible_type_URIs, request.amounts, request.contract_address)
 
     return {"signatureMessage": signature}

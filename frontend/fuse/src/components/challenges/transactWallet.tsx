@@ -8,7 +8,7 @@ import { sign } from 'crypto';
 
 export default function MintNFT() {
     // const to = '0x3749367e53B6fdf5ceDb2D6BCEf7d740C7074885';
-    const collectibleTypeIds = [BigInt(1)]; // Example token IDs
+    const collectibleURIs = [BigInt(1)]; // Example URIs
     const amounts = [BigInt(1)]; // Example amounts
     const signature = '0x1bf25efeff5e4b25d3196bf3ecbfe76e03b1a7fddc8f5a31e837ce14122c3326171b225bb1d276495c93957cd31d236743395a0275eb76a9e5fe3cf3be94ef211c'; // Example signature
     const to = '0x3980dDB72A01ECF127c79C2b08865B9583471321'; // Replace with the recipient address
@@ -22,13 +22,13 @@ export default function MintNFT() {
     const provider = await getWeb3Provider(primaryWallet)
     const signer = await getSigner(primaryWallet)
     const contractInstance = new ethers.Contract(
-        '0x7E7b8cdD92766a19c2dAbB7CD6750901206d7c6e',
+        '0xe38b618cee9e26221da3c2ba52405580355987fc',
         abi,
         signer
     )
     let sig_encode = ethers.hexlify(signature)
     console.log(sig_encode,"encode")
-    let result = await contractInstance.mintBatchWithSignature!(to, collectibleTypeIds, amounts, signature)
+    let result = await contractInstance.mintBatchWithURIsAndSignature!(to, collectibleURIs, amounts, signature)
 
     console.log(result)
 
