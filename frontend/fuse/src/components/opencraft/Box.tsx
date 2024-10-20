@@ -13,6 +13,11 @@ const DraggableBox = ({ id, left, top, hideSourceOnDrag = false, loading = false
     }),
   }));
 
+  if (isDragging) {
+    return null; // Don't render the box when it's being dragged
+  }
+
+
   return (
     <>
       {isDragging && hideSourceOnDrag ? (

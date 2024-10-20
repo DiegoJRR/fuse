@@ -131,6 +131,7 @@ dist
 
 
 *.venv/
+*env/
 *__pycache__
 *.egg-info
 *.DS_STORE

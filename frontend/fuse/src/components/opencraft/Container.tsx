@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { ItemTypes } from './ItemTypes';
 import Box from './Box';
@@ -10,30 +10,18 @@ import { useBoxesStore } from "../../state/useBoxesStore";
 
 const DropContainer = () => {
   const store = useBoxesStore();
-  const { boxes } = store;
+  const { boxes, addBox, moveBox, removeBox } = store;
 
-  const containerElement = useRef(null);
-
-  const moveBox = (id, left, top, title, emoji) => {
-    if (id) {
-      Object.assign(boxes[id], { left, top });
-    } else {
-      const key = Math.random().toString(36).substring(7);
-      boxes[key] = { top, left, title, emoji };
-      console.log(boxes);
-    }
-  };
+  const containerElement = useRef<HTMLDivElement>(null);
 
   const [, drop] = useDrop(() => ({
     accept: ItemTypes.BOX,
     drop(item, monitor) {
-      if (item.id && item.left !== null && item.top !== null) {
+      if (item.id) {
         const delta = monitor.getDifferenceFromInitialOffset();
-        console.log("Delta", delta)
+        console.log("Delta", delta);
         if (delta && delta.x !== null && delta.y !== null) {
-          const left = Math.round(item.left + delta.x);
-          const top = Math.round(item.top + delta.y);
-          moveBox(item.id, left, top);
+          moveBox(item.id, delta.x, delta.y);
         }
       } else {
         const delta = monitor.getClientOffset();
@@ -41,18 +29,24 @@ const DropContainer = () => {
         if (delta && delta.x !== null && delta.y !== null) {
           const left = Math.round(delta.x - containerCoords.left - 40);
           const top = Math.round(delta.y - containerCoords.top - 15);
-          moveBox(null, left, top, item.title, item.emoji);
+          addBox({left, top, title: item.title, emoji: item.emoji});
         }
       }
       return undefined;
     },
   }));
 
+  useEffect(() => {
+    if (containerElement.current) {
+      drop(containerElement.current);
+    }
+  }, [drop]);
+
   return (
     <div ref={containerElement}>
       <main className="flex gap-x-3">
         <div className="w-3/4">
-          <div ref={drop} className="container">
+          <div className="container">
             {Object.entries(boxes).map(([key, value]) => (
               <Box
                 id={key}

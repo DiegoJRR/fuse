@@ -3,9 +3,13 @@ import { useState } from 'react';
 export interface BoxStoreEntry {
     top: number;
     left: number;
-    title: string;
-    emoji: string;
+    title?: string | undefined;
+    emoji?: string | undefined;
     loading?: boolean;
+}
+
+export interface BoxStores {
+    [id : string] : BoxStoreEntry
 }
 
 // Custom hook to manage boxes
@@ -33,5 +37,18 @@ export const useBoxesStore = () => {
         });
     };
 
-    return { boxes, addBox, removeBox };
+    const moveBox = (id : string, delta_x : number, delta_y : number) => {
+        setBoxes((prevBoxes) => {
+            const newBoxes : BoxStores = { ...prevBoxes } as BoxStores;
+            newBoxes[id] = {
+                ...newBoxes[id],
+                left: newBoxes[id].left + delta_x,
+                top: newBoxes[id].top + delta_y
+            } ;
+            console.log(newBoxes)
+            return newBoxes;
+        });
+    }
+
+    return { boxes, addBox, moveBox, removeBox };
 };
