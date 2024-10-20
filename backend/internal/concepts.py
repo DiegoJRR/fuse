@@ -1,6 +1,7 @@
 import re
+from typing import List
 
-def format_order_concepts(first_concept: str, second_concept: str) -> str:
+def format_order_concepts(first_concept: str, second_concept: str) -> List[str]:
     concepts = [first_concept.lower(), second_concept.lower()]
     cleaned_concepts = [re.sub(r'[^a-z0-9]', '', concept) for concept in concepts]
     cleaned_concepts.sort()
