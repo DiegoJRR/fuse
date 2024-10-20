@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import uuid
 
 
+
 load_dotenv()
 
 import dspy
@@ -14,7 +15,7 @@ import dspy
 lm = turbo = dspy.OpenAI(model='gpt-3.5-turbo-1106', max_tokens=4096, stop=['Observation'])
 dspy.settings.configure(lm=lm)
 
-from .internal import walrus, concepts, db, ai_gen
+from .internal import walrus, concepts, db, ai_gen, signer
 
 app = FastAPI()
 
@@ -143,3 +144,16 @@ def read_item(blob_id: str):
         file.write(blob_bytes)
 
     return {"blob_id": blob_id}
+
+class SignRequestBody(BaseModel):
+    to: str
+    collectible_type_ids: str
+    amounts: str
+    contract_address :str
+
+@app.get("signature/")
+def sign(request: SignRequestBody):
+
+    signature = signer.signContract(request.to, request.collectible_type_ids, request.amounts, request.contract_address)
+
+    return {"signatureMessage": signature}
