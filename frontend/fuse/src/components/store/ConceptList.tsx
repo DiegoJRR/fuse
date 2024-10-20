@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 type GridState = {
-  grid: Record<string, string | null>; // A dictionary to store tile states
+  grid: Record<string, string | null>;
   setTile: (row: number, col: number, item: string | null) => void; // Action to update a tile's state
 };
 

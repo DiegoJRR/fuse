@@ -5,18 +5,16 @@ import { WagmiProvider } from 'wagmi';
 import {config} from "../config";
 
 // Import DraggableCanvas dynamically to disable SSR
-const DraggableCanvas = dynamic(() => import('@/components/store/draggableCanvas'), {
-  ssr: false,
-});
 
 export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#41126e] to-[#15162c] text-white">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-4xl font-bold mb-4">Infinite Craft Clone</h1>
-        {/* Render the DraggableCanvas */}
-        <div className="relative w-[800px] h-[600px] bg-gray-300">
-          <DraggableCanvas />
+        <h1 className="mb-4 text-4xl font-bold">Infinite Craft Clone</h1>
+        <div className="relative h-[600px] w-[800px] bg-gray-300">
+          <DndProvider backend={HTML5Backend}>
+            <Container />
+          </DndProvider>
         </div>
         <SignMessageButton message="CHINGA TU MADRE"/>
 
