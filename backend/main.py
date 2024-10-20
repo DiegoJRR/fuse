@@ -2,6 +2,13 @@ from fastapi import FastAPI
 from typing import Union
 import json
 from pydantic import BaseModel
+from dotenv import load_dotenv
+load_dotenv() 
+
+import dspy
+
+lm = turbo = dspy.OpenAI(model='gpt-3.5-turbo-1106', max_tokens=4096, stop=['Observation'])
+dspy.settings.configure(lm=lm)
 
 from .internal import walrus, concepts, db, ai_gen
 
@@ -47,8 +54,8 @@ def combine_concepts(request: CombineConceptsRequest):
         concept_combinator = ai_gen.ConceptCombinator()
         emoji_generator = ai_gen.EmojiGenerator()
 
-        combination_result = concept_combinator(concept_1 = ordered_concepts[0], concept_2 = ordered_concepts[1]).result_concept
-        emoji_result = emoji_generator(combination_result).emoji
+        combination_result = concept_combinator(concept_1 = ordered_concepts[0], concept_2 = ordered_concepts[1])
+        emoji_result = emoji_generator(combination_result)
         
         combination_metadata = {
             "description": "Fuse game object.",
@@ -69,7 +76,7 @@ def combine_concepts(request: CombineConceptsRequest):
 
         db_client.put_combination(db_object)
 
-        return json.dumps(combination_metadata).encode('utf-8')
+        return json.dumps(db_object).encode('utf-8')
 
 @app.get("/download/{bloc_id}")
 def read_item(blob_id: str):
