@@ -5,10 +5,10 @@ const Tile = ({ title, emoji, size }) => {
   const audioRef = React.useRef(new Audio('/sounds/card_slam.wav'));
 
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setIsClicked(true);
     audioRef.current.currentTime = 0; // Reset the audio to the beginning
-    audioRef.current.play(); // Play the sound
+    await audioRef.current.play(); // Play the sound
 
     // Stop the sound after 50 milliseconds
     setTimeout(() => {
