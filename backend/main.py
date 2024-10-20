@@ -143,22 +143,17 @@ def read_item(blob_id: str):
 
     return {"blob_id": blob_id}
 
-@app.get("/uris/{session_id}")
-def sign(session_id: str):
-    uris = []
-    db_client = db.DB()
-    session_data = db_client.get_session(session_id)
-
-    if not session_data:
-        return {"uris": uris}
-
-    for concept_id in session_data["concept_ids"]:
-        db_object = db_client.get_combination_by_id(concept_id)
-        uris.append(db_object["uri"])
-
-    return {"uris": uris}
-@app.get("/signature")
-def sign(address: str,collectible_type_ids: str,amounts: int):
-    
-    signature = signer.signContract(address, collectible_type_ids, amounts,"0xE38b618CEE9e26221Da3c2BA52405580355987fC")
-    return {"signature": signature}
+#@app.get("/uris/{session_id}")
+#def sign(session_id: str):
+#    uris = []
+#    db_client = db.DB()
+#    session_data = db_client.get_session(session_id)
+#
+#    if not session_data:
+#        return {"uris": uris}
+#
+#    for concept_id in session_data["concept_ids"]:
+#        db_object = db_client.get_combination_by_id(concept_id)
+#        uris.append(db_object["uri"])
+#
+#    return {"uris": uris}
