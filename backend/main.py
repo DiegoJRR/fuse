@@ -14,7 +14,7 @@ import dspy
 lm = turbo = dspy.OpenAI(model='gpt-3.5-turbo-1106', max_tokens=4096, stop=['Observation'])
 dspy.settings.configure(lm=lm)
 
-from .internal import walrus, concepts, db, ai_gen, signer
+from .internal import walrus, concepts, db, ai_gen #, signer
 
 app = FastAPI()
 
