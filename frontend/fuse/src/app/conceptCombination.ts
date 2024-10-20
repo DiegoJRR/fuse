@@ -16,6 +16,7 @@ export type ConceptCombinationResponse = {
 export const postConceptCombination = async (request: ConceptCombinationRequest): Promise<ConceptCombinationResponse> => {
   const response = await fetch("https://fuse-production.up.railway.app/combine", {
     method: "POST",
+    mode: 'no-cors',
     headers: {
       "Content-Type": "application/json",
     },
