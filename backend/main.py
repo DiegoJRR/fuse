@@ -47,6 +47,9 @@ def combine_concepts(request: CombineConceptsRequest):
 
     # Check DB to see if this key already exists
     combination_data = db_client.get_combination(combination_key)
+    combination_data["parent_name1"] = ordered_concepts[0]
+    combination_data["parent_name2"] = ordered_concepts[1]
+    combination_data["combination_key"] = combination_key    
     
     if combination_data:
         return combination_data
