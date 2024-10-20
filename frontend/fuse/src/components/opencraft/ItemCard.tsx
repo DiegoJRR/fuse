@@ -47,7 +47,6 @@ const DraggableItem = ({ title, emoji, id, size }) => {
     },
   }));
 
-  // Conditionally set class names based on the size prop
   const classNames = `
     ${size === 'large' ? 'text-2xl space-x-2.5 py-2.5 px-4' : 'space-x-1.5 px-3 py-1'}
     border-gray-200 bg-white shadow hover:bg-gray-100 cursor-pointer transition inline-block font-medium border rounded-lg
@@ -56,7 +55,7 @@ const DraggableItem = ({ title, emoji, id, size }) => {
   return (
     <div ref={drop} className={classNames}>
       <span>{emoji}</span>
-      <span>{title}</span>
+      <span style={{ color: 'black' }}>{title}</span>
     </div>
   );
 };

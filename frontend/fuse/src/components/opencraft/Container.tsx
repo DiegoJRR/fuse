@@ -29,6 +29,7 @@ const DropContainer = () => {
     drop(item, monitor) {
       if (item.id && item.left !== null && item.top !== null) {
         const delta = monitor.getDifferenceFromInitialOffset();
+        console.log("Delta", delta)
         if (delta && delta.x !== null && delta.y !== null) {
           const left = Math.round(item.left + delta.x);
           const top = Math.round(item.top + delta.y);
