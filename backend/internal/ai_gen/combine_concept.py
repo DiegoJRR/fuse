@@ -22,6 +22,6 @@ class ConceptCombinator(dspy.Module):
         self.combine = dspy.ChainOfThought(ConceptWordCombination)
         
     def forward(self, concept_1, concept_2):
-        result_concept = self.combine(concept_1=concept_1, concept_2=concept_2)
+        result_concept = self.combine(concept_1=concept_1, concept_2=concept_2).result_concept
         return result_concept
         
