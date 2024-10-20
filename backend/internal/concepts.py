@@ -1,16 +1,14 @@
 import re
+from typing import List
+
+def format_order_concepts(first_concept: str, second_concept: str) -> List[str]:
+    concepts = [first_concept.lower(), second_concept.lower()]
+    cleaned_concepts = [re.sub(r'[^a-z0-9]', '', concept) for concept in concepts]
+    cleaned_concepts.sort()
+    return cleaned_concepts
 
 def get_concepts_key(first_concept: str, second_concept: str) -> str:
-    concepts = [first_concept.lower(), second_concept.lower()]
-
-    # Remove special characters, allowing only ASCII
-    cleaned_concepts = [re.sub(r'[^a-z0-9]', '', concept) for concept in concepts]
-
-    if cleaned_concepts[0] == "" or cleaned_concepts[1] == "":
-        return ""
-
-    cleaned_concepts.sort()
-
-    # Combine with an underscore
-    combined_result = '_'.join(cleaned_concepts)
+    concepts = format_order_concepts(first_concept, second_concept)
+    combined_result = '_'.join(concepts)
+    
     return combined_result

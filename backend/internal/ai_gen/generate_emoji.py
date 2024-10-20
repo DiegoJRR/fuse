@@ -9,7 +9,7 @@ class ConceptEmoji(dspy.Signature):
     egg -> 🥚
     """
     concept = dspy.InputField(desc="Concept, described by one or two words.")
-    result_concept = dspy.OutputField(desc="Result emojis related to the concept. Prefer a single emoji.")
+    result_emoji = dspy.OutputField(desc="Result emojis related to the concept. Prefer a single emoji.")
     
 class EmojiGenerator(dspy.Module):
     
@@ -18,6 +18,6 @@ class EmojiGenerator(dspy.Module):
         self.generate_emoji = dspy.ChainOfThought(ConceptEmoji)
         
     def forward(self, concept):
-        result_emoji = self.generate_emoji(concept=concept)
+        result_emoji = self.generate_emoji(concept=concept).result_emoji
         return result_emoji
         

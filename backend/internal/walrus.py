@@ -1,6 +1,7 @@
 import time
 import json
 import requests
+import io
 
 
 class Walrus:
@@ -25,7 +26,15 @@ class Walrus:
         print(f"Time taken to upload data: {elapsed_time:.2f} seconds")
         
         response.raise_for_status()
-        return response.json()
+        json_response = response.json()
+        
+        blob_id = None
+        if "newlyCreated" in json_response.keys():
+            blob_id = json_response['newlyCreated']['blobObject']['blobId']
+        else:
+            blob_id = json_response['alreadyCertified']['blobId']
+        
+        return blob_id
 
     # TODO: Cache this
     def retrieve_blob(self, blob_id: str, output_file: str = None) -> str:
@@ -60,7 +69,10 @@ def upload_json(walrus_instance: Walrus, data_dict: dict, epochs: int = 1) -> di
     # Convert the dictionary to a JSON string and encode it to bytes
     json_data = json.dumps(data_dict).encode('utf-8')
     # Call the store_blob method to upload the data
-    response = walrus_instance.store_blob(json_data, epochs)
+    print(json_data)
+    virtual_file = io.BytesIO(json_data)
+
+    response = walrus_instance.store_blob(virtual_file, epochs)
     return response
 
 
